@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>AjaxApp</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+  <script th:src="@{/js/memo.js}"></script>
+</head>
+<body>
+  <h1>AjaxApp</h1>
+
+  <form th:action="@{/posts}" method="post" th:object="${postForm}" id="form">
+    <input type="text" th:field="*{content}" id="content"/>
+    <input type="submit" value="投稿する" id="submit"/>
+  </form>
+
+<div id="list">
+</div>
+
+  <div th:each="post : ${postList}">
+    <div class="post">
+      <div class="post-date">
+        投稿日時：<span th:text="${post.createdAt}"></span>
+      </div>
+      <div class="post-content">
+        <span th:text="${post.content}"></span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
