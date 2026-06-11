@@ -9,7 +9,7 @@
   <h1>AjaxApp</h1>
 
   <form th:action="@{/posts}" method="post" th:object="${postForm}" id="form">
-    <input type="text" th:field="*{content}"/>
+    <input type="text" th:field="*{content}" id="content"/>
     <input type="submit" value="投稿する" id="submit"/>
   </form>
 
@@ -26,5 +26,7 @@
       </div>
     </div>
   </div>
+
+  <script th:src="@{/js/memo.js}"></script>
 </body>
 </html>

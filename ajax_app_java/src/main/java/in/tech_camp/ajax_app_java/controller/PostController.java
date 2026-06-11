@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody; // 👈 1. これを追加インポート
 
 import in.tech_camp.ajax_app_java.entity.PostEntity;
 import in.tech_camp.ajax_app_java.form.PostForm;
@@ -17,24 +16,28 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PostController {
 
-  private final PostRepository postRepository;
+    private final PostRepository postRepository;
 
-  @GetMapping("/")
-  public String showList(Model model) {
-    var postList = postRepository.findAll();
-    model.addAttribute("postList", postList);
-    model.addAttribute("postForm", new PostForm());
-    return "posts/index";
-  }
+    @GetMapping("/")
+    public String showList(Model model) {
+        var postList = postRepository.findAll();
+        model.addAttribute("postList", postList);
+        model.addAttribute("postForm", new PostForm());
+        return "posts/index";
+    }
 
-  @PostMapping("/posts")
-  @ResponseBody // 👈 2. あなたのメソッドのすぐ上にこれを1行足すだけ！
-  public ResponseEntity<PostEntity> savePost(@ModelAttribute("postForm") PostForm form){
-    PostEntity post = new PostEntity();
-    post.setContent(form.getContent());
-    postRepository.insert(post);
-    PostEntity resultPost = postRepository.findById(post.getId());
-    return ResponseEntity.ok(resultPost);
-  }
-  
+    @PostMapping("/posts")
+    public ResponseEntity<PostEntity> savePost(@ModelAttribute("postForm") PostForm form){
+        PostEntity post = new PostEntity();
+        post.setContent(form.getContent());
+        
+        // 💡 【重要】まずデータベースに保存します。
+        // これを実行することで、MyBatisがデータベースから発行されたIDを自動で「post」にセットしてくれます！
+        postRepository.insert(post); 
+        
+        // 保存されてIDがセットされた「post.getId()」を使って、最新のデータを取得します。
+        PostEntity resultPost = postRepository.findById(post.getId());
+        
+        return ResponseEntity.ok(resultPost);
+    }
 }
