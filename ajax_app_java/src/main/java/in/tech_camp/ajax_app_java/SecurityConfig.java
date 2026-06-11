@@ -18,9 +18,10 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-      .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+    .authorizeHttpRequests(authorize -> authorize
+        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // CSSやJSはログインなしでも許可する
         .anyRequest().authenticated()
-      )
+    )
       .formLogin(form -> form
         .permitAll() 
       )
