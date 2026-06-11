@@ -18,10 +18,9 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-    .authorizeHttpRequests(authorize -> authorize
-        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // CSSやJSはログインなしでも許可する
+      .authorizeHttpRequests(authorizeRequests -> authorizeRequests
         .anyRequest().authenticated()
-    )
+      )
       .formLogin(form -> form
         .permitAll() 
       )
@@ -32,7 +31,7 @@ public class SecurityConfig {
 
   @Bean
   public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-    String username = System.getenv("BASIC_AUTH_USER");
+     String username = System.getenv("BASIC_AUTH_USER");
     String password = System.getenv("BASIC_AUTH_PASSWORD");
 
     UserDetails user = User.withUsername(username)

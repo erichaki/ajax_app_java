@@ -12,7 +12,7 @@ public interface PostRepository {
     @Select("select * from posts order by created_at desc")
     List<PostEntity> findAll();
 
-    
+    // 💡 PostgreSQL用に「RETURNING id」を明示し、keyColumnを指定する確実な方法に変更しました
     @Insert("insert into posts (content) values (#{content}) returning id")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     void insert(PostEntity post);
